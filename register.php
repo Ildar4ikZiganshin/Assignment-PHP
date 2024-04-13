@@ -31,14 +31,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $stmt->bindParam(':last_name', $last_name);
             $stmt->bindParam(':email', $email);
             $stmt->bindParam(':password', $hashed_password);
-            $stmt->execute();
 
-            // Login the new user
-            $_SESSION['email'] = $email;
-            $_SESSION['first_name'] = $first_name;
-            $_SESSION['last_name'] = $last_name;
-            header("Location: member.php");
-            exit;
+            if ($stmt->execute()) {
+                // Login the new user
+                $_SESSION['email'] = $email;
+                $_SESSION['first_name'] = $first_name;
+                $_SESSION['last_name'] = $last_name;
+                header("Location: member.php");
+                exit;
+            } else {
+                $error_message = "An error occurred while registering. Please try again.";
+            }
         }
     }
 }
